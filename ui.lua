@@ -696,21 +696,31 @@ local function CreateIntro()
     IntroFrame.Size = UDim2New(1, 0, 1, 0)
     IntroFrame.ZIndex = 99999
     
-    -- "N" text that slides from right to left
+    -- Container for both text elements to keep them together
+    local TextContainer = InstanceNew("Frame")
+    TextContainer.Name = "TextContainer"
+    TextContainer.Parent = IntroFrame
+    TextContainer.BackgroundTransparency = 1
+    TextContainer.Position = UDim2New(0.5, 0, 0.5, 0)
+    TextContainer.AnchorPoint = Vector2New(0.5, 0.5)
+    TextContainer.Size = UDim2New(0, 400, 0, 100)
+    TextContainer.ZIndex = 99999
+    
+    -- "N" text that starts centered and slides left
     local NText = InstanceNew("TextLabel")
     NText.Name = "NText"
-    NText.Parent = IntroFrame
+    NText.Parent = TextContainer
     NText.BackgroundTransparency = 1
-    NText.Position = UDim2New(0.5, 100, 0.5, 0)
+    NText.Position = UDim2New(0.5, 0, 0.5, 0)
     NText.AnchorPoint = Vector2New(0.5, 0.5)
-    NText.Size = UDim2New(0, 200, 0, 100)
+    NText.Size = UDim2New(0, 100, 0, 100)
     NText.Font = Enum.Font.GothamBold
     NText.Text = "N"
     NText.TextColor3 = FromRGB(255, 50, 150)
     NText.TextSize = 82
     NText.TextTransparency = 0
     NText.ZIndex = 100000
-    NText.TextXAlignment = Enum.TextXAlignment.Right
+    NText.TextXAlignment = Enum.TextXAlignment.Center
     
     local NStroke = InstanceNew("UIStroke")
     NStroke.Parent = NText
@@ -718,14 +728,14 @@ local function CreateIntro()
     NStroke.Thickness = 2
     NStroke.Transparency = 0.3
     
-    -- "-HOOK" text that appears after N slides
+    -- "-HOOK" text positioned right next to N
     local HookText = InstanceNew("TextLabel")
     HookText.Name = "HookText"
-    HookText.Parent = IntroFrame
+    HookText.Parent = TextContainer
     HookText.BackgroundTransparency = 1
-    HookText.Position = UDim2New(0.5, 100, 0.5, 0)
+    HookText.Position = UDim2New(0.5, 55, 0.5, 0)
     HookText.AnchorPoint = Vector2New(0, 0.5)
-    HookText.Size = UDim2New(0, 300, 0, 100)
+    HookText.Size = UDim2New(0, 250, 0, 100)
     HookText.Font = Enum.Font.GothamBold
     HookText.Text = "-HOOK"
     HookText.TextColor3 = FromRGB(200, 200, 255)
@@ -743,12 +753,12 @@ local function CreateIntro()
     -- Animation: N slides to the left
     task.wait(0.3)
     local SlideN = TweenService:Create(NText, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Position = UDim2New(0.5, -100, 0.5, 0)
+        Position = UDim2New(0.5, -55, 0.5, 0)
     })
     SlideN:Play()
     SlideN.Completed:Wait()
     
-    -- Animation: -HOOK fades in
+    -- Animation: -HOOK fades in (already positioned correctly next to N)
     local FadeInHook = TweenService:Create(HookText, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
         TextTransparency = 0
     })
@@ -3468,28 +3478,22 @@ do
                 AnchorPoint = Vector2New(0.5, 0.5),
                 Position = UDim2New(0.5, 0, 0.5, 0),
                 BorderColor3 = FromRGB(0, 0, 0),
-                Size = UDim2New(0, 621, 0, 542),
-                BorderSizePixel = 2,
-                BackgroundColor3 = FromRGB(17, 21, 27)
+                Size = UDim2New(0, 800, 0, 600),
+                BorderSizePixel = 0,
+                BackgroundColor3 = FromRGB(25, 25, 50)
             })  Items["MainFrame"]:AddToTheme({BackgroundColor3 = "Background 1"})
 
             Items["MainFrame"]:MakeDraggable()
-            Items["MainFrame"]:MakeResizeable(Vector2New(621, 542), Vector2New(9999, 9999))
+            Items["MainFrame"]:MakeResizeable(Vector2New(800, 600), Vector2New(9999, 9999))
             
             Items["UIStroke"] = Instances:Create("UIStroke", {
                 Parent = Items["MainFrame"].Instance,
                 Name = "\0",
-                Color = FromRGB(94, 213, 213),
+                Color = FromRGB(55, 55, 95),
+                Thickness = 1,
                 LineJoinMode = Enum.LineJoinMode.Miter,
                 ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-            })  Items["UIStroke"]:AddToTheme({Color = "Accent"})
-            
-            Instances:Create("UIGradient", {
-                Parent = Items["UIStroke"].Instance,
-                Name = "\0",
-                Rotation = 90,
-                Transparency = NumSequence{NumSequenceKeypoint(0, 0), NumSequenceKeypoint(0.696, 0.2749999761581421), NumSequenceKeypoint(0.84, 0.574999988079071), NumSequenceKeypoint(1, 1)}
-            })
+            })  Items["UIStroke"]:AddToTheme({Color = "Border"})
             
             Items["Inline"] = Instances:Create("Frame", {
                 Parent = Items["MainFrame"].Instance,
@@ -3502,40 +3506,39 @@ do
                 BackgroundColor3 = FromRGB(255, 255, 255)
             })
             
-            Instances:Create("UIStroke", {
+            -- Title bar with name and main tabs on same line
+            Items["TitleBar"] = Instances:Create("Frame", {
                 Parent = Items["Inline"].Instance,
                 Name = "\0",
-                Color = FromRGB(0, 0, 0),
-                LineJoinMode = Enum.LineJoinMode.Miter,
-                ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-            }):AddToTheme({Color = "Window Outline"})
+                BackgroundColor3 = FromRGB(30, 30, 60),
+                Position = UDim2New(0, 0, 0, 0),
+                Size = UDim2New(1, 0, 0, 35),
+                BorderSizePixel = 0
+            })  Items["TitleBar"]:AddToTheme({BackgroundColor3 = "Background 2"})
             
-            Items["Logo"] = Instances:Create("ImageLabel", {
-                Parent = Items["Inline"].Instance,
+            Instances:Create("UIStroke", {
+                Parent = Items["TitleBar"].Instance,
                 Name = "\0",
-                ImageColor3 = FromRGB(94, 213, 213),
-                BorderColor3 = FromRGB(0, 0, 0),
-                Image = "rbxassetid://"..Window.Logo,
-                BackgroundTransparency = 1,
-                Position = UDim2New(0, 8, 0, 10),
-                Size = UDim2New(0, 18, 0, 18),
-                BorderSizePixel = 0,
-                BackgroundColor3 = FromRGB(255, 255, 255)
-            })  Items["Logo"]:AddToTheme({ImageColor3 = "Accent"})
+                Color = FromRGB(55, 55, 95),
+                Thickness = 1,
+                ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            }):AddToTheme({Color = "Border"})
             
             Items["Title"] = Instances:Create("TextLabel", {
-                Parent = Items["Inline"].Instance,
+                Parent = Items["TitleBar"].Instance,
                 Name = "\0",
                 FontFace = Library.Font,
                 TextColor3 = FromRGB(255, 255, 255),
                 BorderColor3 = FromRGB(0, 0, 0),
                 Text = Window.Name,
-                Size = UDim2New(0, 0, 0, 15),
+                Size = UDim2New(0, 0, 0, 35),
                 BackgroundTransparency = 1,
-                Position = UDim2New(0, 32, 0, 10),
+                Position = UDim2New(0, 15, 0, 0),
                 BorderSizePixel = 0,
                 AutomaticSize = Enum.AutomaticSize.X,
-                TextSize = 14,
+                TextSize = 16,
+                Font = Enum.Font.GothamBold,
+                TextXAlignment = Enum.TextXAlignment.Left,
                 BackgroundColor3 = FromRGB(255, 255, 255)
             })  Items["Title"]:AddToTheme({TextColor3 = "Text"})
             
@@ -3544,65 +3547,41 @@ do
                 Name = "\0",
                 BorderColor3 = FromRGB(0, 0, 0),
                 BackgroundTransparency = 1,
-                Position = UDim2New(0, 7, 0, 39),
+                Position = UDim2New(0, 8, 0, 42),
                 ClipsDescendants = true,
-                Size = UDim2New(1, -14, 1, -46),
+                Size = UDim2New(1, -16, 1, -50),
                 ZIndex = 2,
                 BorderSizePixel = 0,
                 BackgroundColor3 = FromRGB(255, 255, 255)
             })
             
-            Instances:Create("UIStroke", {
-                Parent = Items["Content"].Instance,
-                Name = "\0",
-                Color = FromRGB(46, 52, 61),
-                LineJoinMode = Enum.LineJoinMode.Miter,
-                ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-            }):AddToTheme({Color = "Border"})
-            
+            -- Sub-tab container (secondary tabs like AIMBOT, ANTI-AIM, etc.)
             Items["Pages"] = Instances:Create("Frame", {
                 Parent = Items["Content"].Instance,
                 Name = "\0",
-                BackgroundTransparency = 1,
+                BackgroundColor3 = FromRGB(30, 30, 60),
                 BorderColor3 = FromRGB(0, 0, 0),
-                Size = UDim2New(1, 0, 0, 30),
-                BorderSizePixel = 0,
-                BackgroundColor3 = FromRGB(255, 255, 255)
-            })
+                Size = UDim2New(1, 0, 0, 32),
+                BorderSizePixel = 0
+            })  Items["Pages"]:AddToTheme({BackgroundColor3 = "Background 2"})
+            
+            Instances:Create("UIStroke", {
+                Parent = Items["Pages"].Instance,
+                Name = "\0",
+                Color = FromRGB(55, 55, 95),
+                Thickness = 1,
+                ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            }):AddToTheme({Color = "Border"})
             
             Instances:Create("UIListLayout", {
                 Parent = Items["Pages"].Instance,
                 Name = "\0",
                 FillDirection = Enum.FillDirection.Horizontal,
                 HorizontalFlex = Enum.UIFlexAlignment.Fill,
-                Padding = UDimNew(0, 1),
+                Padding = UDimNew(0, 0),
                 SortOrder = Enum.SortOrder.LayoutOrder
             })                
 
-            Items["Glow"] = Instances:Create("ImageLabel", {
-                Parent = Items["MainFrame"].Instance,
-                Name = "\0",
-                ImageColor3 = FromRGB(94, 213, 213),
-                ScaleType = Enum.ScaleType.Slice,
-                ImageTransparency = 0.5,
-                BorderColor3 = FromRGB(0, 0, 0),
-                BackgroundColor3 = FromRGB(255, 255, 255),
-                Size = UDim2New(1, 25, 1, 25),
-                AnchorPoint = Vector2New(0.5, 0.5),
-                Image = "rbxassetid://18245826428",
-                BackgroundTransparency = 1,
-                Position = UDim2New(0.5, 0, 0.5, 0),
-                ZIndex = -1,
-                BorderSizePixel = 0,
-                SliceCenter = RectNew(Vector2New(21, 21), Vector2New(79, 79))
-            })  Items["Glow"]:AddToTheme({ImageColor3 = "Accent"})
-            
-            Instances:Create("UIGradient", {
-                Parent = Items["Glow"].Instance,
-                Name = "\0",
-                Rotation = 90,
-                Transparency = NumSequence{NumSequenceKeypoint(0, 0), NumSequenceKeypoint(1, 1)}
-            })                
             
             Window.Items = Items
         end
@@ -3692,104 +3671,49 @@ do
                 Parent = Page.Window.Items["Pages"].Instance,
                 Name = "\0",
                 FontFace = Library.Font,
-                TextColor3 = FromRGB(0, 0, 0),
+                TextColor3 = FromRGB(150, 150, 180),
                 BorderColor3 = FromRGB(0, 0, 0),
                 Text = "",
                 AutoButtonColor = false,
                 BackgroundTransparency = 1,
                 Size = UDim2New(0, 0, 1, 0),
                 BorderSizePixel = 0,
-                TextSize = 14,
-                BackgroundColor3 = FromRGB(255, 255, 255)
-            })
+                TextSize = 13,
+                BackgroundColor3 = FromRGB(30, 30, 60)
+            })  Items["Inactive"]:AddToTheme({BackgroundColor3 = "Background 2"})
             
-            Instances:Create("UIStroke", {
-                Parent = Items["Inactive"].Instance,
-                Name = "\0",
-                Color = FromRGB(46, 52, 61),
-                LineJoinMode = Enum.LineJoinMode.Miter,
-                ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-            }):AddToTheme({Color = "Border"})
-            
+            -- Pink underline for active tab (Fatality style)
             Items["Liner"] = Instances:Create("Frame", {
                 Parent = Items["Inactive"].Instance,
                 Name = "\0",
                 BackgroundTransparency = 1,
-                Size = UDim2New(0, 0, 0, 1),
+                Size = UDim2New(0, 0, 0, 2),
+                Position = UDim2New(0, 0, 1, -2),
                 BorderColor3 = FromRGB(0, 0, 0),
-                ZIndex = 2,
+                ZIndex = 3,
                 BorderSizePixel = 0,
-                BackgroundColor3 = FromRGB(94, 213, 213)
+                BackgroundColor3 = FromRGB(255, 50, 150)
             })  Items["Liner"]:AddToTheme({BackgroundColor3 = "Accent"})
-            
-            Items["Glow"] = Instances:Create("ImageLabel", {
-                Parent = Items["Liner"].Instance,
-                Name = "\0",
-                Visible = false,
-                ImageTransparency = 0.5,
-                AnchorPoint = Vector2New(0.5, 0.5),
-                Image = "rbxassetid://18245826428",
-                ZIndex = 2,
-                BorderSizePixel = 0,
-                SliceCenter = RectNew(Vector2New(21, 21), Vector2New(79, 79)),
-                ScaleType = Enum.ScaleType.Slice,
-                BorderColor3 = FromRGB(0, 0, 0),
-                BackgroundTransparency = 1,
-                Position = UDim2New(0.5, 0, 0.5, 0),
-                ImageColor3 = FromRGB(94, 213, 213),
-                Size = UDim2New(1, 8, 1, 8),
-                BackgroundColor3 = FromRGB(255, 255, 255)
-            })  Items["Glow"]:AddToTheme({ImageColor3 = "Accent"})
-            
-            Instances:Create("UIGradient", {
-                Parent = Items["Glow"].Instance,
-                Name = "\0",
-                Rotation = 90,
-                Transparency = NumSequence{NumSequenceKeypoint(0, 0), NumSequenceKeypoint(1, 1)}
-            })
             
             Items["Text"] = Instances:Create("TextLabel", {
                 Parent = Items["Inactive"].Instance,
                 Name = "\0",
                 FontFace = Library.Font,
-                TextColor3 = FromRGB(255, 255, 255),
-                TextTransparency = 0.4000000059604645,
-                Text = Page.Name,
+                TextColor3 = FromRGB(150, 150, 180),
+                TextTransparency = 0,
+                Text = Page.Name:upper(),
                 AutomaticSize = Enum.AutomaticSize.X,
-                Size = UDim2New(0, 0, 0, 15),
+                Size = UDim2New(0, 0, 1, 0),
                 AnchorPoint = Vector2New(0.5, 0.5),
                 BorderSizePixel = 0,
                 BackgroundTransparency = 1,
                 Position = UDim2New(0.5, 0, 0.5, 0),
                 BorderColor3 = FromRGB(0, 0, 0),
                 ZIndex = 5,
-                TextSize = 14,
+                TextSize = 13,
+                Font = Enum.Font.Gotham,
                 BackgroundColor3 = FromRGB(255, 255, 255)
-            })  Items["Text"]:AddToTheme({TextColor3 = "Text"})
-                
-            Items["TextGlow"] = Instances:Create("ImageLabel", {
-                Parent = Items["Text"].Instance,
-                Name = "\0",
-                ScaleType = Enum.ScaleType.Slice,
-                ImageTransparency = 1,
-                BorderColor3 = FromRGB(0, 0, 0),
-                BackgroundColor3 = FromRGB(255, 255, 255),
-                Size = UDim2New(1, 8, 1, 8),
-                AnchorPoint = Vector2New(0.5, 0.5),
-                Image = "rbxassetid://18245826428",
-                BackgroundTransparency = 1,
-                Position = UDim2New(0.5, 0, 0.5, 3),
-                ZIndex = 2,
-                BorderSizePixel = 0,
-                SliceCenter = RectNew(Vector2New(21, 21), Vector2New(79, 79))
-            })  Items["TextGlow"]:AddToTheme({ImageColor3 = "Text"})
-            
-            Instances:Create("UIGradient", {
-                Parent = Items["TextGlow"].Instance,
-                Name = "\0",
-                Rotation = 90,
-                Transparency = NumSequence{NumSequenceKeypoint(0, 0), NumSequenceKeypoint(1, 1)}
-            })
+            })  Items["Text"]:AddToTheme({TextColor3 = "Inactive Text"})
             
             Items["Hide"] = Instances:Create("Frame", {
                 Parent = Items["Inactive"].Instance,
@@ -3876,19 +3800,19 @@ do
             Items["Page"].Instance.Parent = Bool and Page.Window.Items["Content"].Instance or Library.UnusedHolder.Instance
 
             if Page.Active then
-                Items["Liner"]:Tween(TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Size = UDim2New(1, 0, 0, 1)})
-                Items["TextGlow"]:Tween(nil, {ImageTransparency = 0.7})
-                Items["Text"]:Tween(nil, {TextTransparency = 0})
-                Items["Hide"]:Tween(nil, {BackgroundTransparency = 0})
+                -- Pink underline appears when active
+                Items["Liner"]:Tween(TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Size = UDim2New(1, 0, 0, 2)})
+                -- Text becomes fully visible and white
+                Items["Text"]:Tween(nil, {TextTransparency = 0, TextColor3 = FromRGB(255, 255, 255)})
 
-                Items["Page"]:Tween(TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2New(0, 0, 0, 35)})
+                Items["Page"]:Tween(TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2New(0, 0, 0, 35)})
             else
-                Items["Liner"]:Tween(TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0, Size = UDim2New(0, 0, 0, 1)})
-                Items["TextGlow"]:Tween(nil, {ImageTransparency = 1})
-                Items["Text"]:Tween(nil, {TextTransparency = 0.4})
-                Items["Hide"]:Tween(nil, {BackgroundTransparency = 1})
+                -- Pink underline hidden when inactive
+                Items["Liner"]:Tween(TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 1, Size = UDim2New(0, 0, 0, 2)})
+                -- Text becomes inactive color
+                Items["Text"]:Tween(nil, {TextTransparency = 0, TextColor3 = FromRGB(150, 150, 180)})
 
-                Items["Page"]:Tween(TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2New(0, 0, 0, 80)})
+                Items["Page"]:Tween(TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2New(0, 0, 0, 80)})
             end
 
             Debounce = false
