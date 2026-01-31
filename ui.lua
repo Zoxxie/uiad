@@ -713,7 +713,7 @@ local function CreateIntro()
     NText.BackgroundTransparency = 1
     NText.Position = UDim2New(0.5, 0, 0.5, 0)
     NText.AnchorPoint = Vector2New(0.5, 0.5)
-    NText.Size = UDim2New(0, 100, 0, 100)
+    NText.Size = UDim2New(0, 80, 0, 100)
     NText.Font = Enum.Font.GothamBold
     NText.Text = "N"
     NText.TextColor3 = FromRGB(255, 50, 150)
@@ -728,12 +728,12 @@ local function CreateIntro()
     NStroke.Thickness = 2
     NStroke.Transparency = 0.3
     
-    -- "-HOOK" text positioned right next to N
+    -- "-HOOK" text positioned RIGHT next to N (close spacing)
     local HookText = InstanceNew("TextLabel")
     HookText.Name = "HookText"
     HookText.Parent = TextContainer
     HookText.BackgroundTransparency = 1
-    HookText.Position = UDim2New(0.5, 55, 0.5, 0)
+    HookText.Position = UDim2New(0.5, 45, 0.5, 0)
     HookText.AnchorPoint = Vector2New(0, 0.5)
     HookText.Size = UDim2New(0, 250, 0, 100)
     HookText.Font = Enum.Font.GothamBold
@@ -750,10 +750,10 @@ local function CreateIntro()
     HookStroke.Thickness = 2
     HookStroke.Transparency = 1
     
-    -- Animation: N slides to the left
+    -- Animation: N slides to the left (smaller distance for closer spacing)
     task.wait(0.3)
     local SlideN = TweenService:Create(NText, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Position = UDim2New(0.5, -55, 0.5, 0)
+        Position = UDim2New(0.5, -45, 0.5, 0)
     })
     SlideN:Play()
     SlideN.Completed:Wait()
@@ -3857,13 +3857,14 @@ do
                 BorderColor3 = FromRGB(0, 0, 0),
                 BorderSizePixel = 0,
                 AutomaticSize = Enum.AutomaticSize.Y,
-                BackgroundColor3 = FromRGB(19, 25, 31)
-            })  Items["Section"]:AddToTheme({BackgroundColor3 = "Inline"})
+                BackgroundColor3 = FromRGB(30, 30, 60)
+            })  Items["Section"]:AddToTheme({BackgroundColor3 = "Background 2"})
             
             Instances:Create("UIStroke", {
                 Parent = Items["Section"].Instance,
                 Name = "\0",
-                Color = FromRGB(46, 52, 61),
+                Color = FromRGB(55, 55, 95),
+                Thickness = 1,
                 LineJoinMode = Enum.LineJoinMode.Miter,
                 ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             }):AddToTheme({Color = "Border"})
@@ -3878,41 +3879,18 @@ do
                 Parent = Items["Section"].Instance,
                 Name = "\0",
                 BorderColor3 = FromRGB(0, 0, 0),
-                Size = UDim2New(1, 0, 0, 25),
+                Size = UDim2New(1, 0, 0, 22),
                 BorderSizePixel = 0,
-                BackgroundColor3 = FromRGB(19, 25, 31)
-            })  Items["Topbar"]:AddToTheme({BackgroundColor3 = "Inline"})
-            
-            Instances:Create("UIGradient", {
-                Parent = Items["Topbar"].Instance,
-                Name = "\0",
-                Rotation = 90,
-                Color = RGBSequence{RGBSequenceKeypoint(0, FromRGB(255, 255, 255)), RGBSequenceKeypoint(1, FromRGB(165, 165, 165))}
-            })
+                BackgroundColor3 = FromRGB(35, 35, 70)
+            })  Items["Topbar"]:AddToTheme({BackgroundColor3 = "Element"})
             
             Instances:Create("UIStroke", {
                 Parent = Items["Topbar"].Instance,
                 Name = "\0",
-                Color = FromRGB(46, 52, 61),
-                LineJoinMode = Enum.LineJoinMode.Miter,
+                Color = FromRGB(55, 55, 95),
+                Thickness = 1,
                 ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             }):AddToTheme({Color = "Border"})
-            
-            Items["Liner"] = Instances:Create("Frame", {
-                Parent = Items["Topbar"].Instance,
-                Name = "\0",
-                BorderColor3 = FromRGB(0, 0, 0),
-                Size = UDim2New(0, 1, 1, 0),
-                BorderSizePixel = 0,
-                BackgroundColor3 = FromRGB(94, 213, 213)
-            })  Items["Liner"]:AddToTheme({BackgroundColor3 = "Accent"})
-            
-            Instances:Create("UIGradient", {
-                Parent = Items["Liner"].Instance,
-                Name = "\0",
-                Rotation = 90,
-                Color = RGBSequence{RGBSequenceKeypoint(0, FromRGB(255, 255, 255)), RGBSequenceKeypoint(1, FromRGB(171, 171, 171))}
-            })
             
             Items["Text"] = Instances:Create("TextLabel", {
                 Parent = Items["Topbar"].Instance,
@@ -3924,10 +3902,10 @@ do
                 AnchorPoint = Vector2New(0, 0.5),
                 Size = UDim2New(0, 0, 0, 15),
                 BackgroundTransparency = 1,
-                Position = UDim2New(0, 8, 0.5, -1),
+                Position = UDim2New(0, 8, 0.5, 0),
                 BorderSizePixel = 0,
                 AutomaticSize = Enum.AutomaticSize.X,
-                TextSize = 14,
+                TextSize = 13,
                 BackgroundColor3 = FromRGB(255, 255, 255)
             })  Items["Text"]:AddToTheme({TextColor3 = "Text"})
             
