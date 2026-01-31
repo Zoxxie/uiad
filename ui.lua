@@ -182,15 +182,15 @@ local Keys = {
 
 local Themes = {
     ["Preset"] = {
-        ["Window Outline"] = FromRGB(0, 0, 0),
-        ["Accent"] = FromRGB(0, 174, 255),
-        ["Background 1"] = FromRGB(20,20,20),
+        ["Window Outline"] = FromRGB(45, 45, 80),
+        ["Accent"] = FromRGB(255, 50, 150),
+        ["Background 1"] = FromRGB(25, 25, 50),
         ["Text"] = FromRGB(255, 255, 255),
-        ["Inline"] = FromHex('#161616'),
-        ["Element"] = FromHex('#1c1c1c'),
-        ["Inactive Text"] = FromRGB(185, 185, 185),
-        ["Border"] =  FromHex('#323232'),
-        ["Background 2"] = FromRGB(24,24,24)
+        ["Inline"] = FromRGB(30, 30, 60),
+        ["Element"] = FromRGB(35, 35, 70),
+        ["Inactive Text"] = FromRGB(150, 150, 180),
+        ["Border"] = FromRGB(55, 55, 95),
+        ["Background 2"] = FromRGB(30, 30, 60)
     }
 }
 
@@ -690,61 +690,105 @@ local function CreateIntro()
     local IntroFrame = InstanceNew("Frame")
     IntroFrame.Name = "IntroFrame"
     IntroFrame.Parent = IntroGui
-    IntroFrame.BackgroundColor3 = FromRGB(10, 10, 10)
+    IntroFrame.BackgroundColor3 = FromRGB(15, 15, 30)
+    IntroFrame.BackgroundTransparency = 0.3
     IntroFrame.BorderSizePixel = 0
     IntroFrame.Size = UDim2New(1, 0, 1, 0)
     IntroFrame.ZIndex = 99999
     
-    local IntroText = InstanceNew("TextLabel")
-    IntroText.Name = "IntroText"
-    IntroText.Parent = IntroFrame
-    IntroText.BackgroundTransparency = 1
-    IntroText.Position = UDim2New(0.5, 0, 0.5, 0)
-    IntroText.AnchorPoint = Vector2New(0.5, 0.5)
-    IntroText.Size = UDim2New(0, 400, 0, 100)
-    IntroText.Font = Enum.Font.GothamBold
-    IntroText.Text = "N-HOOK"
-    IntroText.TextColor3 = Library.Theme["Accent"]
-    IntroText.TextSize = 72
-    IntroText.TextTransparency = 1
-    IntroText.ZIndex = 100000
+    -- "N" text that slides from right to left
+    local NText = InstanceNew("TextLabel")
+    NText.Name = "NText"
+    NText.Parent = IntroFrame
+    NText.BackgroundTransparency = 1
+    NText.Position = UDim2New(0.5, 100, 0.5, 0)
+    NText.AnchorPoint = Vector2New(0.5, 0.5)
+    NText.Size = UDim2New(0, 200, 0, 100)
+    NText.Font = Enum.Font.GothamBold
+    NText.Text = "N"
+    NText.TextColor3 = FromRGB(255, 50, 150)
+    NText.TextSize = 82
+    NText.TextTransparency = 0
+    NText.ZIndex = 100000
+    NText.TextXAlignment = Enum.TextXAlignment.Right
     
-    local IntroStroke = InstanceNew("UIStroke")
-    IntroStroke.Parent = IntroText
-    IntroStroke.Color = FromRGB(255, 255, 255)
-    IntroStroke.Thickness = 2
-    IntroStroke.Transparency = 1
+    local NStroke = InstanceNew("UIStroke")
+    NStroke.Parent = NText
+    NStroke.Color = FromRGB(255, 255, 255)
+    NStroke.Thickness = 2
+    NStroke.Transparency = 0.3
     
-    -- Fade in animation
-    local FadeIn1 = TweenService:Create(IntroText, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+    -- "-HOOK" text that appears after N slides
+    local HookText = InstanceNew("TextLabel")
+    HookText.Name = "HookText"
+    HookText.Parent = IntroFrame
+    HookText.BackgroundTransparency = 1
+    HookText.Position = UDim2New(0.5, 100, 0.5, 0)
+    HookText.AnchorPoint = Vector2New(0, 0.5)
+    HookText.Size = UDim2New(0, 300, 0, 100)
+    HookText.Font = Enum.Font.GothamBold
+    HookText.Text = "-HOOK"
+    HookText.TextColor3 = FromRGB(200, 200, 255)
+    HookText.TextSize = 82
+    HookText.TextTransparency = 1
+    HookText.ZIndex = 100000
+    HookText.TextXAlignment = Enum.TextXAlignment.Left
+    
+    local HookStroke = InstanceNew("UIStroke")
+    HookStroke.Parent = HookText
+    HookStroke.Color = FromRGB(255, 255, 255)
+    HookStroke.Thickness = 2
+    HookStroke.Transparency = 1
+    
+    -- Animation: N slides to the left
+    task.wait(0.3)
+    local SlideN = TweenService:Create(NText, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Position = UDim2New(0.5, -100, 0.5, 0)
+    })
+    SlideN:Play()
+    SlideN.Completed:Wait()
+    
+    -- Animation: -HOOK fades in
+    local FadeInHook = TweenService:Create(HookText, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
         TextTransparency = 0
     })
-    FadeIn1:Play()
+    FadeInHook:Play()
     
-    local FadeIn2 = TweenService:Create(IntroStroke, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Transparency = 0.5
+    local FadeInHookStroke = TweenService:Create(HookStroke, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Transparency = 0.3
     })
-    FadeIn2:Play()
+    FadeInHookStroke:Play()
     
-    -- Wait 4 seconds then fade out
-    task.wait(3.5)
+    -- Wait for display time
+    task.wait(2.5)
     
-    local FadeOut1 = TweenService:Create(IntroFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+    -- Fade out everything
+    local FadeOutBg = TweenService:Create(IntroFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
         BackgroundTransparency = 1
     })
+    FadeOutBg:Play()
     
-    local FadeOut2 = TweenService:Create(IntroText, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+    local FadeOutN = TweenService:Create(NText, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
         TextTransparency = 1
     })
-    FadeOut2:Play()
+    FadeOutN:Play()
     
-    local FadeOut3 = TweenService:Create(IntroStroke, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+    local FadeOutNStroke = TweenService:Create(NStroke, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
         Transparency = 1
     })
-    FadeOut3:Play()
+    FadeOutNStroke:Play()
     
-    FadeOut1:Play()
-    FadeOut1.Completed:Wait()
+    local FadeOutHook = TweenService:Create(HookText, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        TextTransparency = 1
+    })
+    FadeOutHook:Play()
+    
+    local FadeOutHookStroke = TweenService:Create(HookStroke, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Transparency = 1
+    })
+    FadeOutHookStroke:Play()
+    
+    FadeOutBg.Completed:Wait()
     
     IntroGui:Destroy()
     IntroComplete = true
