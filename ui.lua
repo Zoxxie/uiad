@@ -2912,7 +2912,7 @@ do
                 FontFace = Library.Font,
                 TextColor3 = FromRGB(255, 255, 255),
                 BorderColor3 = FromRGB(0, 0, 0),
-                Text = "sametexe009's inventory",
+                Text = "Inventory Viewer",
                 Size = UDim2New(1, -16, 0, 15),
                 Position = UDim2New(0, 8, 0, 8),
                 BackgroundTransparency = 1,
@@ -5161,7 +5161,7 @@ do
         return Textbox
     end
 
-    Library.CreateSettingsPage = function(self, Window, KeybindList, Watermark, ModeratorList)
+    Library.CreateSettingsPage = function(self, Window, KeybindList, Watermark, ModeratorList, InventoryViewer)
         local SettingsPage = Window:Page({Name = "Settings", Columns = 2})
         local SettingsSection = SettingsPage:Section({Name = "Settings", Side = 1}) do
             SettingsSection:Button({
@@ -5196,6 +5196,17 @@ do
                 Callback = function(Value)
                     if ModeratorList then
                         ModeratorList:SetVisibility(Value)
+                    end
+                end
+            })
+            
+            SettingsSection:Toggle({
+                Name = "Inventory Viewer",
+                Flag = "Inventory viewer",
+                Default = false,
+                Callback = function(Value)
+                    if InventoryViewer then
+                        InventoryViewer:SetVisibility(Value)
                     end
                 end
             })
