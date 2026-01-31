@@ -676,6 +676,86 @@ local CustomFont = { } do
     Library.espfont = Library.Fonts["Tahoma XP"]
 end
 
+-- N-HOOK Intro Screen
+local IntroComplete = false
+local function CreateIntro()
+    local IntroGui = InstanceNew("ScreenGui")
+    IntroGui.Name = "NHOOKIntro"
+    IntroGui.Parent = gethui()
+    IntroGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+    IntroGui.DisplayOrder = 999999
+    IntroGui.IgnoreGuiInset = true
+    IntroGui.ResetOnSpawn = false
+    
+    local IntroFrame = InstanceNew("Frame")
+    IntroFrame.Name = "IntroFrame"
+    IntroFrame.Parent = IntroGui
+    IntroFrame.BackgroundColor3 = FromRGB(10, 10, 10)
+    IntroFrame.BorderSizePixel = 0
+    IntroFrame.Size = UDim2New(1, 0, 1, 0)
+    IntroFrame.ZIndex = 99999
+    
+    local IntroText = InstanceNew("TextLabel")
+    IntroText.Name = "IntroText"
+    IntroText.Parent = IntroFrame
+    IntroText.BackgroundTransparency = 1
+    IntroText.Position = UDim2New(0.5, 0, 0.5, 0)
+    IntroText.AnchorPoint = Vector2New(0.5, 0.5)
+    IntroText.Size = UDim2New(0, 400, 0, 100)
+    IntroText.Font = Enum.Font.GothamBold
+    IntroText.Text = "N-HOOK"
+    IntroText.TextColor3 = Library.Theme["Accent"]
+    IntroText.TextSize = 72
+    IntroText.TextTransparency = 1
+    IntroText.ZIndex = 100000
+    
+    local IntroStroke = InstanceNew("UIStroke")
+    IntroStroke.Parent = IntroText
+    IntroStroke.Color = FromRGB(255, 255, 255)
+    IntroStroke.Thickness = 2
+    IntroStroke.Transparency = 1
+    
+    -- Fade in animation
+    local FadeIn1 = TweenService:Create(IntroText, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        TextTransparency = 0
+    })
+    FadeIn1:Play()
+    
+    local FadeIn2 = TweenService:Create(IntroStroke, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Transparency = 0.5
+    })
+    FadeIn2:Play()
+    
+    -- Wait 4 seconds then fade out
+    task.wait(3.5)
+    
+    local FadeOut1 = TweenService:Create(IntroFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        BackgroundTransparency = 1
+    })
+    
+    local FadeOut2 = TweenService:Create(IntroText, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        TextTransparency = 1
+    })
+    FadeOut2:Play()
+    
+    local FadeOut3 = TweenService:Create(IntroStroke, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Transparency = 1
+    })
+    FadeOut3:Play()
+    
+    FadeOut1:Play()
+    FadeOut1.Completed:Wait()
+    
+    IntroGui:Destroy()
+    IntroComplete = true
+end
+
+-- Run intro and wait for it to complete
+task.spawn(CreateIntro)
+
+-- Wait for intro to finish before creating main UI
+repeat task.wait() until IntroComplete
+
 Library.Holder = Instances:Create("ScreenGui", {
     Parent = gethui(),
     Name = "\0",
