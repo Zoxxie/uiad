@@ -713,14 +713,14 @@ local function CreateIntro()
     NText.BackgroundTransparency = 1
     NText.Position = UDim2New(0.5, 0, 0.5, 0)
     NText.AnchorPoint = Vector2New(0.5, 0.5)
-    NText.Size = UDim2New(0, 60, 0, 100)
+    NText.Size = UDim2New(0, 80, 0, 100)
     NText.Font = Enum.Font.GothamBold
     NText.Text = "N"
     NText.TextColor3 = FromRGB(255, 50, 150)
     NText.TextSize = 82
     NText.TextTransparency = 0
     NText.ZIndex = 100000
-    NText.TextXAlignment = Enum.TextXAlignment.Center
+    NText.TextXAlignment = Enum.TextXAlignment.Right
     
     local NStroke = InstanceNew("UIStroke")
     NStroke.Parent = NText
@@ -728,14 +728,14 @@ local function CreateIntro()
     NStroke.Thickness = 2
     NStroke.Transparency = 0.3
     
-    -- "HOOK" text (NO HYPHEN) positioned next to N
+    -- "HOOK" text (NO HYPHEN) - positioned to align with N to make "NHOOK" centered
     local HookText = InstanceNew("TextLabel")
     HookText.Name = "HookText"
     HookText.Parent = TextContainer
     HookText.BackgroundTransparency = 1
-    HookText.Position = UDim2New(0.5, 35, 0.5, 0)
+    HookText.Position = UDim2New(0.5, 0, 0.5, 0)
     HookText.AnchorPoint = Vector2New(0, 0.5)
-    HookText.Size = UDim2New(0, 200, 0, 100)
+    HookText.Size = UDim2New(0, 240, 0, 100)
     HookText.Font = Enum.Font.GothamBold
     HookText.Text = "HOOK"
     HookText.TextColor3 = FromRGB(200, 200, 255)
@@ -750,15 +750,15 @@ local function CreateIntro()
     HookStroke.Thickness = 2
     HookStroke.Transparency = 1
     
-    -- Animation: N slides to the left to make room for HOOK
+    -- Animation: N slides to the left, HOOK positioned to complete "NHOOK" centered
     task.wait(0.3)
     local SlideN = TweenService:Create(NText, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Position = UDim2New(0.5, -100, 0.5, 0)
+        Position = UDim2New(0.5, -120, 0.5, 0)
     })
     SlideN:Play()
     SlideN.Completed:Wait()
     
-    -- Animation: HOOK fades in
+    -- Animation: HOOK fades in right next to N
     local FadeInHook = TweenService:Create(HookText, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
         TextTransparency = 0
     })
@@ -3448,13 +3448,19 @@ do
                 AnchorPoint = Vector2New(0.5, 0.5),
                 Position = UDim2New(0.5, 0, 0.5, 0),
                 BorderColor3 = FromRGB(0, 0, 0),
-                Size = UDim2New(0, 800, 0, 600),
+                Size = UDim2New(0, 620, 0, 480),
                 BorderSizePixel = 0,
                 BackgroundColor3 = FromRGB(25, 25, 50)
             })  Items["MainFrame"]:AddToTheme({BackgroundColor3 = "Background 1"})
+            
+            Instances:Create("UICorner", {
+                Parent = Items["MainFrame"].Instance,
+                Name = "\0",
+                CornerRadius = UDimNew(0, 4)
+            })
 
             Items["MainFrame"]:MakeDraggable()
-            Items["MainFrame"]:MakeResizeable(Vector2New(800, 600), Vector2New(9999, 9999))
+            Items["MainFrame"]:MakeResizeable(Vector2New(620, 480), Vector2New(9999, 9999))
             
             Items["UIStroke"] = Instances:Create("UIStroke", {
                 Parent = Items["MainFrame"].Instance,
@@ -3482,7 +3488,7 @@ do
                 Name = "\0",
                 BackgroundColor3 = FromRGB(30, 30, 60),
                 Position = UDim2New(0, 0, 0, 0),
-                Size = UDim2New(1, 0, 0, 35),
+                Size = UDim2New(1, 0, 0, 28),
                 BorderSizePixel = 0
             })  Items["TitleBar"]:AddToTheme({BackgroundColor3 = "Background 2"})
             
@@ -3501,12 +3507,12 @@ do
                 TextColor3 = FromRGB(255, 255, 255),
                 BorderColor3 = FromRGB(0, 0, 0),
                 Text = Window.Name,
-                Size = UDim2New(0, 0, 0, 35),
+                Size = UDim2New(0, 0, 0, 28),
                 BackgroundTransparency = 1,
-                Position = UDim2New(0, 15, 0, 0),
+                Position = UDim2New(0, 12, 0, 0),
                 BorderSizePixel = 0,
                 AutomaticSize = Enum.AutomaticSize.X,
-                TextSize = 16,
+                TextSize = 14,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 BackgroundColor3 = FromRGB(255, 255, 255)
@@ -3517,9 +3523,9 @@ do
                 Name = "\0",
                 BorderColor3 = FromRGB(0, 0, 0),
                 BackgroundTransparency = 1,
-                Position = UDim2New(0, 8, 0, 42),
+                Position = UDim2New(0, 6, 0, 34),
                 ClipsDescendants = true,
-                Size = UDim2New(1, -16, 1, -50),
+                Size = UDim2New(1, -12, 1, -40),
                 ZIndex = 2,
                 BorderSizePixel = 0,
                 BackgroundColor3 = FromRGB(255, 255, 255)
@@ -3531,7 +3537,7 @@ do
                 Name = "\0",
                 BackgroundColor3 = FromRGB(30, 30, 60),
                 BorderColor3 = FromRGB(0, 0, 0),
-                Size = UDim2New(1, 0, 0, 32),
+                Size = UDim2New(1, 0, 0, 28),
                 BorderSizePixel = 0
             })  Items["Pages"]:AddToTheme({BackgroundColor3 = "Background 2"})
             
@@ -3775,14 +3781,14 @@ do
                 -- Text becomes fully visible and white
                 Items["Text"]:Tween(nil, {TextTransparency = 0, TextColor3 = FromRGB(255, 255, 255)})
 
-                Items["Page"]:Tween(TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2New(0, 0, 0, 35)})
+                Items["Page"]:Tween(TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2New(0, 0, 0, 30)})
             else
                 -- Pink underline hidden when inactive
                 Items["Liner"]:Tween(TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 1, Size = UDim2New(0, 0, 0, 2)})
                 -- Text becomes inactive color
                 Items["Text"]:Tween(nil, {TextTransparency = 0, TextColor3 = FromRGB(150, 150, 180)})
 
-                Items["Page"]:Tween(TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2New(0, 0, 0, 80)})
+                Items["Page"]:Tween(TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2New(0, 0, 0, 70)})
             end
 
             Debounce = false
@@ -3849,7 +3855,7 @@ do
                 Parent = Items["Section"].Instance,
                 Name = "\0",
                 BorderColor3 = FromRGB(0, 0, 0),
-                Size = UDim2New(1, 0, 0, 22),
+                Size = UDim2New(1, 0, 0, 20),
                 BorderSizePixel = 0,
                 BackgroundColor3 = FromRGB(35, 35, 70)
             })  Items["Topbar"]:AddToTheme({BackgroundColor3 = "Element"})
@@ -3872,10 +3878,10 @@ do
                 AnchorPoint = Vector2New(0, 0.5),
                 Size = UDim2New(0, 0, 0, 15),
                 BackgroundTransparency = 1,
-                Position = UDim2New(0, 8, 0.5, 0),
+                Position = UDim2New(0, 7, 0.5, 0),
                 BorderSizePixel = 0,
                 AutomaticSize = Enum.AutomaticSize.X,
-                TextSize = 13,
+                TextSize = 12,
                 BackgroundColor3 = FromRGB(255, 255, 255)
             })  Items["Text"]:AddToTheme({TextColor3 = "Text"})
             
@@ -3884,8 +3890,8 @@ do
                 Name = "\0",
                 BorderColor3 = FromRGB(0, 0, 0),
                 BackgroundTransparency = 1,
-                Position = UDim2New(0, 8, 0, 35),
-                Size = UDim2New(1, -16, 0, 0),
+                Position = UDim2New(0, 7, 0, 28),
+                Size = UDim2New(1, -14, 0, 0),
                 BorderSizePixel = 0,
                 AutomaticSize = Enum.AutomaticSize.Y,
                 BackgroundColor3 = FromRGB(255, 255, 255)
