@@ -706,14 +706,14 @@ local function CreateIntro()
     TextContainer.Size = UDim2New(0, 400, 0, 100)
     TextContainer.ZIndex = 99999
     
-    -- "N" text that starts centered and slides left
+    -- "N" text that starts centered
     local NText = InstanceNew("TextLabel")
     NText.Name = "NText"
     NText.Parent = TextContainer
     NText.BackgroundTransparency = 1
     NText.Position = UDim2New(0.5, 0, 0.5, 0)
     NText.AnchorPoint = Vector2New(0.5, 0.5)
-    NText.Size = UDim2New(0, 80, 0, 100)
+    NText.Size = UDim2New(0, 60, 0, 100)
     NText.Font = Enum.Font.GothamBold
     NText.Text = "N"
     NText.TextColor3 = FromRGB(255, 50, 150)
@@ -728,16 +728,16 @@ local function CreateIntro()
     NStroke.Thickness = 2
     NStroke.Transparency = 0.3
     
-    -- "-HOOK" text positioned RIGHT next to N (close spacing)
+    -- "HOOK" text (NO HYPHEN) positioned next to N
     local HookText = InstanceNew("TextLabel")
     HookText.Name = "HookText"
     HookText.Parent = TextContainer
     HookText.BackgroundTransparency = 1
-    HookText.Position = UDim2New(0.5, 45, 0.5, 0)
+    HookText.Position = UDim2New(0.5, 35, 0.5, 0)
     HookText.AnchorPoint = Vector2New(0, 0.5)
-    HookText.Size = UDim2New(0, 250, 0, 100)
+    HookText.Size = UDim2New(0, 200, 0, 100)
     HookText.Font = Enum.Font.GothamBold
-    HookText.Text = "-HOOK"
+    HookText.Text = "HOOK"
     HookText.TextColor3 = FromRGB(200, 200, 255)
     HookText.TextSize = 82
     HookText.TextTransparency = 1
@@ -750,15 +750,15 @@ local function CreateIntro()
     HookStroke.Thickness = 2
     HookStroke.Transparency = 1
     
-    -- Animation: N slides to the left (smaller distance for closer spacing)
+    -- Animation: N slides to the left to make room for HOOK
     task.wait(0.3)
     local SlideN = TweenService:Create(NText, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Position = UDim2New(0.5, -45, 0.5, 0)
+        Position = UDim2New(0.5, -100, 0.5, 0)
     })
     SlideN:Play()
     SlideN.Completed:Wait()
     
-    -- Animation: -HOOK fades in (already positioned correctly next to N)
+    -- Animation: HOOK fades in
     local FadeInHook = TweenService:Create(HookText, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
         TextTransparency = 0
     })
@@ -2400,53 +2400,22 @@ do
                 Parent = Library.Holder.Instance,
                 Name = "\0",
                 AnchorPoint = Vector2New(0.5, 0),
-                Position = UDim2New(0.5, 0, 0, 25),
+                Position = UDim2New(0.5, 0, 0, 15),
                 BorderColor3 = FromRGB(0, 0, 0),
-                Size = UDim2New(0, 180, 0, 30),
-                BorderSizePixel = 2,
-                BackgroundColor3 = FromRGB(17, 21, 27),
+                Size = UDim2New(0, 180, 0, 26),
+                BorderSizePixel = 0,
+                BackgroundColor3 = FromRGB(25, 25, 50),
                 ZIndex = 5,
             })  Items["Watermark"]:AddToTheme({BackgroundColor3 = "Background 1"})
             
             Items["UIStroke"] = Instances:Create("UIStroke", {
                 Parent = Items["Watermark"].Instance,
                 Name = "\0",
-                Color = FromRGB(94, 213, 213),
+                Color = FromRGB(255, 50, 150),
+                Thickness = 1,
                 LineJoinMode = Enum.LineJoinMode.Miter,
                 ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             })  Items["UIStroke"]:AddToTheme({Color = "Accent"})
-            
-            Instances:Create("UIGradient", {
-                Parent = Items["UIStroke"].Instance,
-                Name = "\0",
-                Rotation = 90,
-                Transparency = NumSequence{NumSequenceKeypoint(0, 0), NumSequenceKeypoint(0.696, 0.2749999761581421), NumSequenceKeypoint(0.84, 0.574999988079071), NumSequenceKeypoint(1, 1)}
-            })
-            
-            Items["Glow"] = Instances:Create("ImageLabel", {
-                Parent = Items["Watermark"].Instance,
-                Name = "\0",
-                ImageColor3 = FromRGB(94, 213, 213),
-                ScaleType = Enum.ScaleType.Slice,
-                ImageTransparency = 0.5,
-                BorderColor3 = FromRGB(0, 0, 0),
-                BackgroundColor3 = FromRGB(255, 255, 255),
-                Size = UDim2New(1, 25, 1, 25),
-                AnchorPoint = Vector2New(0.5, 0.5),
-                Image = "rbxassetid://18245826428",
-                BackgroundTransparency = 1,
-                Position = UDim2New(0.5, 0, 0.5, 0),
-                ZIndex = 4,
-                BorderSizePixel = 0,
-                SliceCenter = RectNew(Vector2New(21, 21), Vector2New(79, 79))
-            })  Items["Glow"]:AddToTheme({ImageColor3 = "Accent"})
-            
-            Instances:Create("UIGradient", {
-                Parent = Items["Glow"].Instance,
-                Name = "\0",
-                Rotation = 90,
-                Transparency = NumSequence{NumSequenceKeypoint(0, 0), NumSequenceKeypoint(1, 1)}
-            })
             
             Items["Text"] = Instances:Create("TextLabel", {
                 Parent = Items["Watermark"].Instance,
@@ -2462,7 +2431,8 @@ do
                 BorderSizePixel = 0,
                 ZIndex = 5,
                 AutomaticSize = Enum.AutomaticSize.X,
-                TextSize = 14,
+                TextSize = 13,
+                Font = Enum.Font.Gotham,
                 BackgroundColor3 = FromRGB(255, 255, 255)
             })  Items["Text"]:AddToTheme({TextColor3 = "Text"})
         end
@@ -2470,7 +2440,7 @@ do
         function Watermark:SetText(Text)
             Text = tostring(Text)
             Items["Text"].Instance.Text = Text
-            Items["Watermark"]:Tween(nil, {Size = UDim2New(0, Items["Text"].Instance.TextBounds.X + 20, 0, 30)})
+            Items["Watermark"]:Tween(nil, {Size = UDim2New(0, Items["Text"].Instance.TextBounds.X + 20, 0, 26)})
         end
 
         function Watermark:SetVisibility(Bool)
